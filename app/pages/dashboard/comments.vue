@@ -4,7 +4,7 @@
   <NuxtLayout
     name="default"
     active-tab="comments"
-  >
-    <div>Kommentar Admin Console | Comments</div>
-  </NuxtLayout>
+    page-title="Comments"
+    page-description="View and manage your comments here."
+  />
 </template>

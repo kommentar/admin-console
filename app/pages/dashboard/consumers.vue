@@ -82,16 +82,9 @@ onMounted(async () => {
   <NuxtLayout
     name="default"
     active-tab="consumers"
+    page-title="Consumers"
+    page-description="View and manage your consumers here."
   >
-    <section>
-      <h2 class="text-2xl font-bold">
-        Consumers
-      </h2>
-      <span class="text-gray-500">
-        View and manage your consumers here.
-      </span>
-    </section>
-    <USeparator class="h-10" />
     <DashboardConsumerTable
       :loading="consumersFetched.value"
       :columns="columns"

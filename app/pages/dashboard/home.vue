@@ -4,7 +4,7 @@
   <NuxtLayout
     name="default"
     active-tab="home"
-  >
-    <div>Kommentar Admin Console | Home</div>
-  </NuxtLayout>
+    page-title="Home"
+    page-description="Stats for your Kommentar instance"
+  />
 </template>
