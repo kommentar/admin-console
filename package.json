@@ -11,6 +11,10 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
+  "volta": {
+    "node": "22.17.1",
+    "pnpm": "10.13.1"
+  },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.57",
     "@iconify-json/simple-icons": "^1.2.43",
@@ -22,5 +26,5 @@
     "eslint": "^9.31.0",
     "typescript": "^5.8.3"
   },
-  "packageManager": "pnpm@9.1.0+sha1.217063ce3fcbf44f3051666f38b810f1ddefee4a"
+  "packageManager": "pnpm@10.13.1"
 }
