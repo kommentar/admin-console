@@ -13,7 +13,7 @@ interface DataReceived {
 interface GetAllConsumersResponse {
   status: number;
   message: string;
-  data: Consumer[] | null;
+  data: Consumer[];
 }
 
 export default defineEventHandler(async (event) => {
@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       status: 401,
       message: "Invalid credentials",
-      data: null
+      data: []
     });
   }
 
@@ -51,7 +51,7 @@ export default defineEventHandler(async (event) => {
     return {
       status: response.status,
       message: "Failed to fetch consumers",
-      data: null
+      data: []
     };
   }
 
@@ -89,6 +89,8 @@ export default defineEventHandler(async (event) => {
     ...consumer,
     description: consumer.description || ""
   }));
+
+  console.log({ consumers: mappedConsumers });
 
   return {
     status: 200,

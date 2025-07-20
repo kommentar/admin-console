@@ -4,29 +4,37 @@ import type { GetAllConsumersResponse } from "~~/server/api/consumers/index.get"
 import type { UpdateConsumerResponse } from "~~/server/api/consumers/[id].put";
 import type { CreateConsumerResponse } from "~~/server/api/consumers/index.post";
 
-const consumerStore = defineStore("consumer", {
+const useConsumerStore = defineStore("consumer", {
   state: (): ConsumerStore["state"] => ({
     available: {
-      data: undefined,
+      data: [],
       count: 0
     },
-    selected: { data: undefined }
+    selected: { data: {} }
   }),
+
+  getters: {
+    availableData: (state) => state.available.data
+  },
 
   actions: {
     async fetchAllAvailable() {
       const { data, error } = await useFetch<GetAllConsumersResponse>("/api/consumers", {
-        method: "GET"
-      });
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).json();
 
       if (!error.value && data.value) {
-        this.available.data = data.value.data || [];
-        this.available.count = data.value.data?.length || 0;
+        const consumers = data.value.data;
+        this.available.data = consumers;
+        this.available.count = consumers.length;
       }
     },
 
     setSelected({ id }: { id: Consumer["id"] }) {
-      this.selected.data = this.available.data?.find((consumer) => consumer.id === id);
+      this.selected.data = this.available.data.find((consumer) => consumer.id === id) || {};
     },
 
     async update({ id, data }: { id: Consumer["id"]; data: Consumer }) {
@@ -52,7 +60,7 @@ const consumerStore = defineStore("consumer", {
 
       if (!error.value) {
         this.available.data = this.available.data?.filter((consumer) => consumer.id !== id);
-        this.selected.data = undefined;
+        this.selected.data = [];
       }
     },
 
@@ -73,5 +81,5 @@ const consumerStore = defineStore("consumer", {
 });
 
 export {
-  consumerStore
+  useConsumerStore
 };

@@ -3,7 +3,7 @@ type ActiveTab = "home" | "consumers" | "comments";
 interface Consumer {
   id: string;
   name: string;
-  description?: string;
+  description: string;
   apiKey: string;
   apiSecret: string;
   allowedHosts: string[];
@@ -14,11 +14,11 @@ interface Consumer {
 interface ConsumerStore {
   state: {
     available: {
-      data: Consumer[] | undefined;
+      data: Consumer[];
       count: number;
     };
     selected: {
-      data: Consumer | undefined;
+      data: Consumer | object;
     };
   };
 }
