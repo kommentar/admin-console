@@ -10,5 +10,16 @@ export default defineNuxtConfig({
     colorMode: true,
   },
 
+  eslint: {
+    config: {
+      stylistic: {
+        arrowParens: true,
+        quotes: "double",
+        semi: true,
+        commaDangle: "always",
+      },
+    },
+  },
+
   compatibilityDate: "2025-07-16",
 });
