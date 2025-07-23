@@ -18,7 +18,7 @@ interface ConsumerStore {
       count: number;
     };
     selected: {
-      data: Consumer | object;
+      data: Consumer;
     };
   };
 }

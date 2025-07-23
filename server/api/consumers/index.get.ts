@@ -90,8 +90,6 @@ export default defineEventHandler(async (event) => {
     description: consumer.description || ""
   }));
 
-  console.log({ consumers: mappedConsumers });
-
   return {
     status: 200,
     message: "Successfully fetched consumers",

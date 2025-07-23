@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { DashboardConsumerTableProps } from "~/components/dashboard/DashboardConsumerTable.vue";
+import type { Consumer } from "~/types";
 
 const consumerStore = useConsumerStore();
 
@@ -72,6 +73,14 @@ const columns: DashboardConsumerTableProps["columns"] = [
   }
 ];
 
+const onRowSelected = (row: Consumer, deselect: boolean) => {
+  if (deselect) {
+    consumerStore.setSelected({ id: "<nope>" });
+    return;
+  }
+  consumerStore.setSelected({ id: row.id });
+};
+
 onMounted(async () => {
   await consumerStore.fetchAllAvailable();
   consumersFetched.value = false;
@@ -85,10 +94,18 @@ onMounted(async () => {
     page-title="Consumers"
     page-description="View and manage your consumers here."
   >
-    <DashboardConsumerTable
-      :loading="consumersFetched.value"
-      :columns="columns"
-      :data="consumerStore.availableData"
-    />
+    <div class="flex flex-col gap-10">
+      <DashboardConsumerTable
+        :loading="consumersFetched.value"
+        :columns="columns"
+        :data="consumerStore.availableData"
+        @row-selected="onRowSelected"
+      />
+      <section class="w-1/2 self-center">
+        <DashboardConsumerForm
+          :consumer="consumerStore.selectedData"
+        />
+      </section>
+    </div>
   </NuxtLayout>
 </template>

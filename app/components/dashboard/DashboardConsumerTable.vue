@@ -14,6 +14,7 @@ export interface DashboardConsumerTableProps {
   columns: TableColumn<Consumer>[];
   data: Consumer[];
   loading: boolean;
+  onRowSelected: (row: Consumer, deselect: boolean) => void;
 }
 
 const props = defineProps<DashboardConsumerTableProps>();
@@ -22,6 +23,7 @@ const rowSelection = ref<Record<string, boolean>>({});
 
 function onSelect(row: TableRow<Consumer>, _e?: Event) {
   row.toggleSelected(!row.getIsSelected());
+  props.onRowSelected(row.original, row.getIsSelected());
 }
 </script>
 

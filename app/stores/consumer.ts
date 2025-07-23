@@ -10,11 +10,23 @@ const useConsumerStore = defineStore("consumer", {
       data: [],
       count: 0
     },
-    selected: { data: {} }
+    selected: {
+      data: {
+        id: "",
+        name: "",
+        description: "",
+        allowedHosts: [],
+        apiKey: "",
+        apiSecret: "",
+        isActive: false,
+        rateLimit: 0
+      }
+    }
   }),
 
   getters: {
-    availableData: (state) => state.available.data
+    availableData: (state) => state.available.data,
+    selectedData: (state) => state.selected.data
   },
 
   actions: {
@@ -34,7 +46,18 @@ const useConsumerStore = defineStore("consumer", {
     },
 
     setSelected({ id }: { id: Consumer["id"] }) {
-      this.selected.data = this.available.data.find((consumer) => consumer.id === id) || {};
+      const blankConsumer = {
+        id: "",
+        name: "",
+        description: "",
+        allowedHosts: [],
+        apiKey: "",
+        apiSecret: "",
+        isActive: false,
+        rateLimit: 0
+      };
+
+      this.selected.data = this.available.data.find((consumer) => consumer.id === id) || blankConsumer;
     },
 
     async update({ id, data }: { id: Consumer["id"]; data: Consumer }) {
@@ -54,13 +77,24 @@ const useConsumerStore = defineStore("consumer", {
     },
 
     async delete({ id }: { id: Consumer["id"] }) {
+      const blankConsumer = {
+        id: "",
+        name: "",
+        description: "",
+        allowedHosts: [],
+        apiKey: "",
+        apiSecret: "",
+        isActive: false,
+        rateLimit: 0
+      };
+
       const { error } = await useFetch(`/api/consumers/${id}`, {
         method: "DELETE"
       });
 
       if (!error.value) {
         this.available.data = this.available.data?.filter((consumer) => consumer.id !== id);
-        this.selected.data = [];
+        this.selected.data = blankConsumer;
       }
     },
 

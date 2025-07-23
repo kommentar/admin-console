@@ -6,10 +6,8 @@ const useLogin: UseLogin = async () => {
       method: "POST"
     });
 
-    console.log("data:", data.value);
-
     if (error.value) {
-      console.log("error:", error.value);
+      console.error("error:", error.value);
       return false;
     }
 
