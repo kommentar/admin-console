@@ -61,12 +61,22 @@ const useConsumerStore = defineStore("consumer", {
     },
 
     async update({ id, data }: { id: Consumer["id"]; data: Consumer }) {
+      // everything except adminKey and adminSecret
+      const requestBody = {
+        name: data.name,
+        description: data.description,
+        allowedHosts: data.allowedHosts,
+        isActive: data.isActive,
+        rateLimit: data.rateLimit
+      };
       const { data: updatedConsumerResponse, error } = await useFetch<UpdateConsumerResponse>(`/api/consumers/${id}`, {
         method: "PUT",
         body: JSON.stringify({
-          consumer: data
+          consumer: requestBody
         })
       });
+
+      console.log("Consumer updated: ", updatedConsumerResponse.value);
 
       if (!error.value && updatedConsumerResponse.value) {
         this.available.data = this.available.data?.map((consumer) =>

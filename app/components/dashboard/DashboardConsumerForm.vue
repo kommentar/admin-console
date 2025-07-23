@@ -2,13 +2,13 @@
 import type { Consumer } from "~/types";
 import { array, boolean, number, object, string } from "yup";
 import type { InferType } from "yup";
-import type { FormSubmitEvent } from "@nuxt/ui";
+import type { FormErrorEvent, FormSubmitEvent } from "@nuxt/ui";
 
 const schema = object({
   id: string().uuid(),
   name: string().required(),
   description: string(),
-  allowedHosts: array().of(string().url()),
+  allowedHosts: array().of(string()),
   apiKey: string().required(),
   apiSecret: string().required(),
   isActive: boolean(),
@@ -19,6 +19,7 @@ type DashboardConsumerFormSchema = InferType<typeof schema>;
 
 interface Props {
   consumer: Consumer;
+  updateConsumer: (consumer: Consumer) => Promise<void>;
 }
 
 const props = defineProps<Props>();
@@ -27,7 +28,7 @@ const state = reactive<DashboardConsumerFormSchema>({
   id: props.consumer.id,
   name: props.consumer.name,
   description: props.consumer.description,
-  allowedHosts: [...props.consumer.allowedHosts], // Create a copy
+  allowedHosts: [...props.consumer.allowedHosts],
   apiKey: props.consumer.apiKey,
   apiSecret: props.consumer.apiSecret,
   isActive: props.consumer.isActive,
@@ -36,10 +37,12 @@ const state = reactive<DashboardConsumerFormSchema>({
 
 const toast = useToast();
 
-async function onSubmit(event: FormSubmitEvent<DashboardConsumerFormSchema>) {
+async function onSubmit(_event: FormSubmitEvent<DashboardConsumerFormSchema>) {
+  await props.updateConsumer(state as Consumer);
+
   toast.add({
     title: "Success",
-    description: "The form has been submitted.",
+    description: "Consumer updated successfully. Please refresh the page to see the changes.",
     color: "success"
   });
 }
@@ -70,6 +73,15 @@ watchEffect(() => {
     state.rateLimit = props.consumer.rateLimit;
   }
 });
+
+function onError(event: FormErrorEvent) {
+  console.error("Form validation errors:", event.errors);
+  toast.add({
+    title: "Validation Error",
+    description: "Please check your form fields. More details in the browser console.",
+    color: "error"
+  });
+}
 </script>
 
 <template>
@@ -96,8 +108,9 @@ watchEffect(() => {
       :disabled="!props.consumer.id"
       :schema="schema"
       :state="state"
-      class="w-full flex flex-col gap-6"
+      class="w-full flex flex-col gap-3"
       @submit="onSubmit"
+      @error="onError"
     >
       <div class="flex flex-row justify-evenly">
         <UFormField
@@ -149,7 +162,6 @@ watchEffect(() => {
           <UInput
             v-model="state.apiKey"
             class="w-full"
-            type="password"
           />
         </UFormField>
 
@@ -162,14 +174,13 @@ watchEffect(() => {
           <UInput
             v-model="state.apiSecret"
             class="w-full"
-            type="password"
           />
         </UFormField>
       </div>
 
       <div class="flex flex-row justify-evenly w-full">
         <UFormField
-          label="Allowed Hosts"
+          label="Allowed Hosts (e.g. www.example.com, example.com, etc.)"
           name="allowedHosts"
           class="w-full"
         >
@@ -230,7 +241,10 @@ watchEffect(() => {
         </UFormField>
       </div>
 
-      <UButton type="submit">
+      <UButton
+        type="submit"
+        class="cursor-pointer"
+      >
         Submit
       </UButton>
     </UForm>

@@ -81,6 +81,12 @@ const onRowSelected = (row: Consumer, deselect: boolean) => {
   consumerStore.setSelected({ id: row.id });
 };
 
+const updateConsumer = async (consumer: Consumer) => {
+  console.log("Updating consumer", consumer);
+  const { id } = consumer;
+  await consumerStore.update({ id, data: consumer });
+};
+
 onMounted(async () => {
   await consumerStore.fetchAllAvailable();
   consumersFetched.value = false;
@@ -94,7 +100,7 @@ onMounted(async () => {
     page-title="Consumers"
     page-description="View and manage your consumers here."
   >
-    <div class="flex flex-col gap-10">
+    <div class="flex flex-col gap-5">
       <DashboardConsumerTable
         :loading="consumersFetched.value"
         :columns="columns"
@@ -104,6 +110,7 @@ onMounted(async () => {
       <section class="w-1/2 self-center">
         <DashboardConsumerForm
           :consumer="consumerStore.selectedData"
+          :update-consumer="updateConsumer"
         />
       </section>
     </div>

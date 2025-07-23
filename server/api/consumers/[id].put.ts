@@ -22,8 +22,11 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const { id } = getQuery(event);
-  const { consumer } = await readBody(event);
+  const id = getRouterParam(event, "id");
+  const body = await readBody(event);
+
+  const jsonBody = JSON.parse(body);
+  console.log(jsonBody.consumer);
 
   const response = await fetch(
     `${adminApiBaseUrl}/consumer/${id}`,
@@ -34,7 +37,7 @@ export default defineEventHandler(async (event) => {
         "x-admin-key": adminKey,
         "x-admin-secret": adminSecret
       },
-      body: JSON.stringify(consumer)
+      body: JSON.stringify(jsonBody.consumer)
     }
   );
 
