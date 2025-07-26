@@ -14,14 +14,6 @@ export default defineEventHandler(async (event) => {
     adminSecret
   } = runtimeConfig;
 
-  if (!adminKey || !adminSecret) {
-    throw createError({
-      status: 401,
-      message: "Invalid credentials",
-      data: null
-    });
-  }
-
   const id = getRouterParam(event, "id");
   const body = await readBody(event);
 

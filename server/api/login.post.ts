@@ -1,17 +1,16 @@
 export default defineEventHandler(async (event) => {
-  const runtimeConfig = useRuntimeConfig();
-  const {
-    adminApiBaseUrl,
-    adminKey,
-    adminSecret
-  } = runtimeConfig;
+  const body = await readBody(event);
+  const { adminKey, adminSecret } = body;
 
   if (!adminKey || !adminSecret) {
     throw createError({
-      status: 400,
-      message: "Invalid input"
+      statusCode: 400,
+      statusMessage: "Invalid input"
     });
   }
+
+  const runtimeConfig = useRuntimeConfig();
+  const { adminApiBaseUrl } = runtimeConfig;
 
   const response = await fetch(
     `${adminApiBaseUrl}/consumers?offset=0&limit=1`,
@@ -32,6 +31,18 @@ export default defineEventHandler(async (event) => {
       message: "Login Failed"
     };
   }
+
+  const sessionToken = await createSession({
+    authenticated: true,
+    timestamp: Date.now()
+  });
+
+  setCookie(event, "admin-session", sessionToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 60 * 60 * 24 // 24 hours
+  });
 
   return {
     status: 200,

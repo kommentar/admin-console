@@ -24,14 +24,6 @@ export default defineEventHandler(async (event) => {
     adminSecret
   } = runtimeConfig;
 
-  if (!adminKey || !adminSecret) {
-    throw createError({
-      status: 401,
-      message: "Invalid credentials",
-      data: []
-    });
-  }
-
   const { offset, limit } = getQuery(event);
 
   const response = await fetch(

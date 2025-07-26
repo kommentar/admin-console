@@ -13,7 +13,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     adminApiBaseUrl: process.env.NUXT_ADMIN_API_BASE_URL,
     adminKey: process.env.NUXT_ADMIN_KEY,
-    adminSecret: process.env.NUXT_ADMIN_SECRET
+    adminSecret: process.env.NUXT_ADMIN_SECRET,
+    sessionSecret: process.env.NUXT_SESSION_SECRET
   },
 
   compatibilityDate: "2025-07-16",
