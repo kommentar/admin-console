@@ -76,8 +76,6 @@ const useConsumerStore = defineStore("consumer", {
         })
       });
 
-      console.log("Consumer updated: ", updatedConsumerResponse.value);
-
       if (!error.value && updatedConsumerResponse.value) {
         this.available.data = this.available.data?.map((consumer) =>
           consumer.id === id ? (updatedConsumerResponse.value?.data || consumer) : consumer

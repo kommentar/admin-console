@@ -18,7 +18,6 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
 
   const jsonBody = JSON.parse(body);
-  console.log(jsonBody.consumer);
 
   const response = await fetch(
     `${adminApiBaseUrl}/consumer/${id}`,

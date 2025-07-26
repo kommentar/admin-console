@@ -82,7 +82,6 @@ const onRowSelected = (row: Consumer, deselect: boolean) => {
 };
 
 const updateConsumer = async (consumer: Consumer) => {
-  console.log("Updating consumer", consumer);
   const { id } = consumer;
   await consumerStore.update({ id, data: consumer });
 };
