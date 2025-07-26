@@ -26,6 +26,13 @@ const items = ref<NavigationMenuItem[][]>([
       icon: "i-lucide-message-circle",
       to: "/dashboard/comments"
     }
+  ],
+  [
+    {
+      label: "Logout",
+      icon: "i-lucide-log-out",
+      to: "/logout"
+    }
   ]
 ]);
 
@@ -53,7 +60,8 @@ switch (props.activeTab) {
     :items="items"
     :ui="{
       root: 'p-2 border-r border-r-gray-800',
-      list: 'mt-3 flex flex-col gap-2'
+      list: 'mt-3 flex flex-col gap-2',
+      childLink: 'p-2'
     }"
     class="data-[orientation=vertical]:w-52 data-[orientation=vertical]:h-screen"
   />
