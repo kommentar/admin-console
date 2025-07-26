@@ -23,6 +23,7 @@ interface Props {
   emptyFormDescription: string;
   consumer: Consumer;
   updateConsumer: (consumer: Consumer) => Promise<void>;
+  deleteConsumer: () => Promise<void>;
 }
 
 const props = defineProps<Props>();
@@ -83,6 +84,16 @@ function onError(event: FormErrorEvent) {
     title: "Validation Error",
     description: "Please check your form fields. More details in the browser console.",
     color: "error"
+  });
+}
+
+async function removeConsumerHandler(_e: MouseEvent) {
+  await props.deleteConsumer();
+
+  toast.add({
+    title: "Consumer Deleted",
+    description: "The consumer has been successfully deleted.",
+    color: "success"
   });
 }
 </script>
@@ -244,12 +255,23 @@ function onError(event: FormErrorEvent) {
         </UFormField>
       </div>
 
-      <UButton
-        type="submit"
-        class="cursor-pointer"
-      >
-        Submit
-      </UButton>
+      <div class="w-full flex justify-between items-center gap-5">
+        <UButton
+          type="submit"
+          class="w-full cursor-pointer"
+        >
+          Update Consumer
+        </UButton>
+        <UButton
+          variant="outline"
+          color="error"
+          type="button"
+          class="w-full cursor-pointer"
+          @click="removeConsumerHandler"
+        >
+          Delete Consumer
+        </UButton>
+      </div>
     </UForm>
   </UCard>
 </template>

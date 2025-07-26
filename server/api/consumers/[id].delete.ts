@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
     adminSecret
   } = runtimeConfig;
 
-  const { id } = getQuery(event);
+  const id = getRouterParam(event, "id");
 
   const response = await fetch(
     `${adminApiBaseUrl}/consumer/${id}`,

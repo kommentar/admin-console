@@ -87,6 +87,11 @@ const updateConsumer = async (consumer: Consumer) => {
   await consumerStore.update({ id, data: consumer });
 };
 
+const deleteConsumer = async () => {
+  const { id } = consumerStore.selectedData;
+  await consumerStore.delete({ id });
+};
+
 onMounted(async () => {
   await consumerStore.fetchAllAvailable();
   consumersFetched.value = false;
@@ -114,6 +119,7 @@ onMounted(async () => {
           :form-disabled="consumerStore.selectedData && consumerStore.selectedData.id.length === 0"
           :consumer="consumerStore.selectedData"
           :update-consumer="updateConsumer"
+          :delete-consumer="deleteConsumer"
         />
       </section>
     </div>
