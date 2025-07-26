@@ -108,7 +108,7 @@ const useConsumerStore = defineStore("consumer", {
       }
     },
 
-    async createNew({ data }: { data: Omit<Consumer, "id" | "createdAt" | "updatedAt" | "apiKey" | "apiSecret"> }) {
+    async createNew({ data }: { data: Omit<Consumer, "id" | "apiKey" | "apiSecret"> }) {
       const { data: createdConsumerResponse, error } = await useFetch<CreateConsumerResponse>("/api/consumers", {
         method: "POST",
         body: JSON.stringify({

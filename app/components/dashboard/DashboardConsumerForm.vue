@@ -18,6 +18,9 @@ const schema = object({
 type DashboardConsumerFormSchema = InferType<typeof schema>;
 
 interface Props {
+  formDisabled: boolean;
+  formTitle: string;
+  emptyFormDescription: string;
   consumer: Consumer;
   updateConsumer: (consumer: Consumer) => Promise<void>;
 }
@@ -89,23 +92,23 @@ function onError(event: FormErrorEvent) {
     <template #header>
       <div class="flex flex-row justify-between items-center">
         <h3 class="text-xl font-bold">
-          Edit Consumer Details
+          {{ formTitle }}
         </h3>
         <span
-          v-if="!props.consumer.id"
+          v-if="formDisabled"
           class="text-md text-muted font-medium flex items-center gap-1"
         >
           <UIcon
             name="i-lucide-info"
             class="size-5"
           />
-          Select a consumer to enable to the form fields
+          {{ emptyFormDescription }}
         </span>
       </div>
     </template>
 
     <UForm
-      :disabled="!props.consumer.id"
+      :disabled="formDisabled"
       :schema="schema"
       :state="state"
       class="w-full flex flex-col gap-3"

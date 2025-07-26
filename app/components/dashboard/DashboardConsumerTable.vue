@@ -52,9 +52,7 @@ function onSelect(row: TableRow<Consumer>, _e?: Event) {
         @update:page="(p) => table?.tableApi?.setPageIndex(p - 1)"
       />
 
-      <span class="absolute right-0 text-sm text-gray-500">
-        Note: Only one consumer can be selected at a time.
-      </span>
+      <DashboardAddConsumerDrawer class="absolute cursor-pointer right-0" />
     </div>
   </div>
 </template>

@@ -109,6 +109,9 @@ onMounted(async () => {
       />
       <section class="w-1/2 self-center">
         <DashboardConsumerForm
+          form-title="Edit Consumer"
+          empty-form-description="Select a consumer to enable the form fields."
+          :form-disabled="consumerStore.selectedData && consumerStore.selectedData.id.length === 0"
           :consumer="consumerStore.selectedData"
           :update-consumer="updateConsumer"
         />

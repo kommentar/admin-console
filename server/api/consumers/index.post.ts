@@ -14,7 +14,9 @@ export default defineEventHandler(async (event) => {
     adminSecret
   } = runtimeConfig;
 
-  const { consumer } = await readBody(event);
+  const body = await readBody(event);
+  const { consumer } = JSON.parse(body);
+  console.log(consumer);
 
   const response = await fetch(
     `${adminApiBaseUrl}/consumer`,
