@@ -97,6 +97,9 @@ async function removeConsumerHandler(_e: MouseEvent) {
     color: "success"
   });
 }
+
+const { copy: copyApiKey, copied: copyApiKeyCopied } = useClipboard();
+const { copy: copyApiSecret, copied: copyApiSecretCopied } = useClipboard();
 </script>
 
 <template>
@@ -176,8 +179,29 @@ async function removeConsumerHandler(_e: MouseEvent) {
         >
           <UInput
             v-model="state.apiKey"
+            disabled
             class="w-full"
-          />
+            :ui="{ trailing: 'pr-0.5' }"
+          >
+            <template
+              v-if="state.apiKey.length"
+              #trailing
+            >
+              <UTooltip
+                text="Copy to clipboard"
+                :content="{ side: 'right' }"
+              >
+                <UButton
+                  :color="copyApiKeyCopied ? 'success' : 'neutral'"
+                  variant="link"
+                  size="sm"
+                  :icon="copyApiKeyCopied ? 'i-lucide-copy-check' : 'i-lucide-copy'"
+                  aria-label="Copy to clipboard"
+                  @click="copyApiKey(state.apiKey)"
+                />
+              </UTooltip>
+            </template>
+          </UInput>
         </UFormField>
 
         <UFormField
@@ -188,8 +212,29 @@ async function removeConsumerHandler(_e: MouseEvent) {
         >
           <UInput
             v-model="state.apiSecret"
+            disabled
             class="w-full"
-          />
+            :ui="{ trailing: 'pr-0.5' }"
+          >
+            <template
+              v-if="state.apiSecret.length"
+              #trailing
+            >
+              <UTooltip
+                text="Copy to clipboard"
+                :content="{ side: 'right' }"
+              >
+                <UButton
+                  :color="copyApiSecretCopied ? 'success' : 'neutral'"
+                  variant="link"
+                  size="sm"
+                  :icon="copyApiSecretCopied ? 'i-lucide-copy-check' : 'i-lucide-copy'"
+                  aria-label="Copy to clipboard"
+                  @click="copyApiSecret(state.apiSecret)"
+                />
+              </UTooltip>
+            </template>
+          </UInput>
         </UFormField>
       </div>
 
