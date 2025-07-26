@@ -55,8 +55,9 @@ async function onSubmit(_event: FormSubmitEvent<DashboardAddConsumerFormSchema>)
 
   toast.add({
     title: "Success",
-    description: "Consumer created successfully. Please refresh the page to see the changes.",
-    color: "success"
+    description: "Consumer created successfully.",
+    color: "success",
+    duration: 1500
   });
 }
 </script>

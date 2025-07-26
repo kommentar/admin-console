@@ -28,12 +28,12 @@ export default defineEventHandler(async (event) => {
     }
   );
 
-  const { status, message, data } = await response.json();
+  const jsonResponse = await response.json();
 
   return {
-    status,
-    message,
-    data
+    status: response.status,
+    message: response.statusText,
+    data: jsonResponse
   };
 });
 

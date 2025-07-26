@@ -2,7 +2,6 @@ import type { ConsumerStore, Consumer } from "~/types";
 import { useFetch } from "@vueuse/core";
 import type { GetAllConsumersResponse } from "~~/server/api/consumers/index.get";
 import type { UpdateConsumerResponse } from "~~/server/api/consumers/[id].put";
-import type { CreateConsumerResponse } from "~~/server/api/consumers/index.post";
 
 const useConsumerStore = defineStore("consumer", {
   state: (): ConsumerStore["state"] => ({
@@ -69,18 +68,20 @@ const useConsumerStore = defineStore("consumer", {
         isActive: data.isActive,
         rateLimit: data.rateLimit
       };
-      const { data: updatedConsumerResponse, error } = await useFetch<UpdateConsumerResponse>(`/api/consumers/${id}`, {
+      const { data: updatedConsumerResponse, error } = await useFetch(`/api/consumers/${id}`, {
         method: "PUT",
         body: JSON.stringify({
           consumer: requestBody
         })
       });
 
-      if (!error.value && updatedConsumerResponse.value) {
-        this.available.data = this.available.data?.map((consumer) =>
-          consumer.id === id ? (updatedConsumerResponse.value?.data || consumer) : consumer
+      const response = JSON.parse(updatedConsumerResponse.value as string);
+
+      if (!error.value && response) {
+        this.selected.data = response.data;
+        this.available.data = this.available.data.map((consumer) =>
+          consumer.id === id ? response.data : consumer
         );
-        this.selected.data = updatedConsumerResponse.value.data!;
       }
     },
 
@@ -107,16 +108,18 @@ const useConsumerStore = defineStore("consumer", {
     },
 
     async createNew({ data }: { data: Omit<Consumer, "id" | "apiKey" | "apiSecret"> }) {
-      const { data: createdConsumerResponse, error } = await useFetch<CreateConsumerResponse>("/api/consumers", {
+      const { data: createdConsumerResponse, error } = await useFetch("/api/consumers", {
         method: "POST",
         body: JSON.stringify({
           consumer: data
         })
       });
 
-      if (!error.value && createdConsumerResponse.value) {
-        this.available.data = [...(this.available.data || []), createdConsumerResponse.value.data!];
-        this.selected.data = createdConsumerResponse.value.data!;
+      const response = JSON.parse(createdConsumerResponse.value as string);
+
+      if (!error.value && response) {
+        this.available.data.push(response.data);
+        this.selected.data = response.data;
       }
     }
   }
