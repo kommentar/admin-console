@@ -1,5 +1,30 @@
 <script setup lang="ts">
-const loadingIndicatorValue = ref(null);
+import { object, string } from "yup";
+import type { InferType } from "yup";
+import type { FormSubmitEvent } from "@nuxt/ui";
+
+export interface LoginFormProps {
+  loading: boolean;
+  submitHandler: (event: FormSubmitEvent<LoginFormSchema>) => Promise<void>;
+}
+
+const props = defineProps<LoginFormProps>();
+
+const schema = object({
+  adminKey: string().required("Required"),
+  adminSecret: string().required("Required")
+});
+
+type LoginFormSchema = InferType<typeof schema>;
+
+const state = reactive({
+  adminKey: "",
+  adminSecret: ""
+});
+
+async function onSubmit(event: FormSubmitEvent<LoginFormSchema>) {
+  await props.submitHandler(event);
+}
 </script>
 
 <template>
@@ -8,12 +33,36 @@ const loadingIndicatorValue = ref(null);
       <h3 class="text-2xl font-bold">
         Welcome Back
       </h3>
-      <span>Logging you in to the admin console</span>
-
-      <UProgress
-        v-model="loadingIndicatorValue"
-        class="mt-4"
-      />
+      <span>Enter your admin credentials to access the console</span>
     </template>
+
+    <UForm
+      :schema="schema"
+      :state="state"
+      class="space-y-4"
+      @submit="onSubmit"
+    >
+      <UFormField
+        label="Admin Key"
+        name="adminKey"
+      >
+        <UInput v-model="state.adminKey" />
+      </UFormField>
+      <UFormField
+        label="Admin Secret"
+        name="adminSecret"
+      >
+        <UInput
+          v-model="state.adminSecret"
+          type="password"
+        />
+      </UFormField>
+      <UButton
+        type="submit"
+        :loading="loading"
+      >
+        Login
+      </UButton>
+    </UForm>
   </UCard>
 </template>

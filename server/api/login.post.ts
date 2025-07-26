@@ -1,6 +1,6 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const { adminKey, adminSecret } = body;
+  const { adminKey, adminSecret } = JSON.parse(body);
 
   if (!adminKey || !adminSecret) {
     throw createError({

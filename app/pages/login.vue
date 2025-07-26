@@ -1,12 +1,25 @@
 <script setup lang="ts">
 import { useFetch } from "@vueuse/core";
+import type { LoginFormProps } from "~/components/LoginForm.vue";
+
+type LoginFn = (params: { adminKey: string; adminSecret: string }) => Promise<boolean>;
+type LoginHandler = LoginFormProps["submitHandler"];
+
+const { data: authCheck } = await useFetch<{ authenticated: boolean }>("/api/validate-check");
+if (authCheck.value?.authenticated) {
+  await navigateTo("/dashboard/home");
+}
 
 const toast = useToast();
+const isLoading = ref(false);
 
-const login = async () => {
+const login: LoginFn = async ({ adminKey, adminSecret }) => {
   try {
+    isLoading.value = true;
+
     const { error, statusCode } = await useFetch("/api/login", {
-      method: "POST"
+      method: "POST",
+      body: JSON.stringify({ adminKey, adminSecret })
     });
 
     if (error.value) {
@@ -18,10 +31,22 @@ const login = async () => {
   catch {
     return false;
   }
+  finally {
+    isLoading.value = false;
+  }
 };
 
-const loginHandler = async () => {
-  const authorized = await login();
+const loginHandler: LoginHandler = async (event) => {
+  if (!event.data.adminKey || !event.data.adminSecret) {
+    toast.add({
+      title: "Invalid credentials",
+      description: "Please enter both admin key and secret.",
+      color: "error"
+    });
+    return;
+  }
+
+  const authorized = await login(event.data);
 
   if (authorized) {
     toast.add({
@@ -31,7 +56,7 @@ const loginHandler = async () => {
       duration: 1000
     });
 
-    navigateTo("/dashboard/home");
+    await navigateTo("/dashboard/home");
   }
   else {
     toast.add({
@@ -41,14 +66,13 @@ const loginHandler = async () => {
     });
   }
 };
-
-onMounted(async () => {
-  await loginHandler();
-});
 </script>
 
 <template>
   <div class="w-screen h-screen flex justify-center items-center">
-    <LoginForm />
+    <LoginForm
+      :loading="isLoading"
+      :submit-handler="loginHandler"
+    />
   </div>
 </template>
