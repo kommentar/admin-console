@@ -5,11 +5,6 @@ import type { LoginFormProps } from "~/components/LoginForm.vue";
 type LoginFn = (params: { adminKey: string; adminSecret: string }) => Promise<boolean>;
 type LoginHandler = LoginFormProps["submitHandler"];
 
-const { data: authCheck } = await useFetch<{ authenticated: boolean }>("/api/validate-check");
-if (authCheck.value?.authenticated) {
-  await navigateTo("/dashboard/home");
-}
-
 const toast = useToast();
 const isLoading = ref(false);
 
@@ -66,6 +61,10 @@ const loginHandler: LoginHandler = async (event) => {
     });
   }
 };
+
+definePageMeta({
+  middleware: ["default-redirect"]
+});
 </script>
 
 <template>
