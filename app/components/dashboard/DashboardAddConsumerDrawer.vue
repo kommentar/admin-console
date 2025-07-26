@@ -25,6 +25,14 @@ const state = reactive<DashboardAddConsumerFormSchema>({
   rateLimit: 0
 });
 
+const resetState = () => {
+  state.name = "";
+  state.description = "";
+  state.allowedHosts = [];
+  state.isActive = true;
+  state.rateLimit = 0;
+};
+
 const updateHost = (index: number, value: string) => {
   if (state.allowedHosts) {
     state.allowedHosts[index] = value;
@@ -52,6 +60,7 @@ async function onSubmit(_event: FormSubmitEvent<DashboardAddConsumerFormSchema>)
   const consumer = state as Consumer;
   await consumerStore.createNew({ data: consumer });
   drawerOpen.value = false;
+  resetState();
 
   toast.add({
     title: "Success",
