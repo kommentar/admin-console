@@ -1,24 +1,47 @@
-FROM node:22-alpine AS build
+# Build stage
+FROM node:22-alpine AS builder
+
+# Set working directory
 WORKDIR /app
 
-RUN corepack enable
+# Enable corepack and set pnpm version
+RUN corepack enable && corepack prepare pnpm@10 --activate
 
-COPY package.json pnpm-lock.yaml .npmrc ./
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
 
-RUN pnpm i
+# Install dependencies (including devDependencies for build)
+RUN pnpm install --frozen-lockfile
 
-COPY . ./
+# Copy source code
+COPY . .
 
+# Build the application
 RUN pnpm run build
 
-FROM node:22-alpine
+# Production stage
+FROM node:22-alpine AS runner
+
+# Create non-root user for security
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nuxtjs
+
+# Set working directory
 WORKDIR /app
 
-COPY --from=build /app/.output/ ./
+# Copy built application from builder stage
+COPY --from=builder --chown=nuxtjs:nodejs /app/.output ./
 
-ENV PORT=3000
-ENV HOST=0.0.0.0
+# Switch to non-root user
+USER nuxtjs
 
+# Expose port
 EXPOSE 3000
 
-CMD ["node", "/app/server/index.mjs"]
+# Set environment variables
+ENV NODE_ENV=production
+ENV NITRO_PORT=3000
+ENV NITRO_HOST=0.0.0.0
+
+# Start the application
+CMD ["node", "server/index.mjs"]

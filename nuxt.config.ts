@@ -28,5 +28,9 @@ export default defineNuxtConfig({
         commaDangle: "never"
       }
     }
+  },
+
+  nitro: {
+    preset: "node-server"
   }
 });
