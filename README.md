@@ -1,75 +1,33 @@
-# Nuxt UI Starter
+# Kommentar | Admin Console
 
-Look at [Nuxt docs](https://nuxt.com/docs/getting-started/introduction) and [Nuxt UI docs](https://ui.nuxt.com) to learn more.
+The admin console is a dashboard of sorts, to help manage operations of your Kommentar instance.
 
-## Setup
+Make sure to read the documentation for more information. [Documentation](https://docs.kommentar.dev)
 
-Make sure to install the dependencies:
+## Running locally
 
-```bash
-# npm
-npm install
+To run the admin console locally, follow these steps:
 
-# pnpm
-pnpm install
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/kommentar/admin-console.git
+   ```
 
-# yarn
-yarn install
+2. Install dependencies:
+   ```bash
+   cd admin-console
+   pnpm install
+   ```
 
-# bun
-bun install
-```
+3. Setup environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env file to set your environment variables
+   ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+4. Start the server:
+   ```bash
+   pnpm start
+   # OR
+   pnpm dev
+   ```
