@@ -196,6 +196,7 @@ const { copy: copyApiSecret, copied: copyApiSecretCopied } = useClipboard();
                   variant="link"
                   size="sm"
                   :icon="copyApiKeyCopied ? 'i-lucide-copy-check' : 'i-lucide-copy'"
+                  class="bg-muted"
                   aria-label="Copy to clipboard"
                   @click="copyApiKey(state.apiKey)"
                 />
@@ -229,6 +230,7 @@ const { copy: copyApiSecret, copied: copyApiSecretCopied } = useClipboard();
                   variant="link"
                   size="sm"
                   :icon="copyApiSecretCopied ? 'i-lucide-copy-check' : 'i-lucide-copy'"
+                  class="bg-muted"
                   aria-label="Copy to clipboard"
                   @click="copyApiSecret(state.apiSecret)"
                 />
