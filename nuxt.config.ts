@@ -19,6 +19,10 @@ export default defineNuxtConfig({
 
   compatibilityDate: "2025-07-16",
 
+  nitro: {
+    preset: "node-server"
+  },
+
   eslint: {
     config: {
       stylistic: {
@@ -28,9 +32,5 @@ export default defineNuxtConfig({
         commaDangle: "never"
       }
     }
-  },
-
-  nitro: {
-    preset: "node-server"
   }
 });

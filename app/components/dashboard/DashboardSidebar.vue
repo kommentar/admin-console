@@ -33,6 +33,12 @@ const items = ref<NavigationMenuItem[][]>([
       icon: "i-lucide-log-out",
       to: "/logout"
     }
+  ],
+  [
+    {
+      id: "color-mode",
+      slot: "color-mode"
+    }
   ]
 ]);
 
@@ -59,10 +65,14 @@ switch (props.activeTab) {
     orientation="vertical"
     :items="items"
     :ui="{
-      root: 'p-2 border-r border-r-gray-800',
-      list: 'mt-3 flex flex-col gap-2',
+      root: 'p-2 border-r-2 border-r-zinc-800 light:border-r-zinc-100',
+      list: 'flex flex-col gap-2',
       childLink: 'p-2'
     }"
     class="data-[orientation=vertical]:w-52 data-[orientation=vertical]:h-screen"
-  />
+  >
+    <template #color-mode>
+      <ColorModeButton />
+    </template>
+  </UNavigationMenu>
 </template>
