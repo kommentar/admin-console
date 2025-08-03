@@ -59,14 +59,13 @@ function onError(event: FormErrorEvent) {
 async function onSubmit(_event: FormSubmitEvent<DashboardAddConsumerFormSchema>) {
   const consumer = state as Consumer;
   await consumerStore.createNew({ data: consumer });
-  drawerOpen.value = false;
   resetState();
 
   toast.add({
     title: "Success",
-    description: "Consumer created successfully.",
+    description: "Consumer created successfully. Make sure to copy the API secret as it will not be shown unhashed again.",
     color: "success",
-    duration: 1500
+    duration: 10000
   });
 }
 </script>
